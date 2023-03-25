@@ -83,7 +83,6 @@ resource "aws_eks_node_group" "worker-node-group" {
   node_group_name = "happystays-eks-node-group"
   node_role_arn  = aws_iam_role.happystays-workernodes.arn
   subnet_ids   = [var.IBS-RnD-Sub1, var.IBS-RnD-Sub2]
-  instance_types = ["t2.small"]
 
   scaling_config {
    desired_size = 1
