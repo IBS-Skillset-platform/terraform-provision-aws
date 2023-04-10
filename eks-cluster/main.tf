@@ -33,7 +33,7 @@ resource "aws_eks_cluster" "happystays-eks-cluster" {
  role_arn = aws_iam_role.eks-iam-role.arn
 
  vpc_config {
-  subnet_ids = [var.IBS-RnD-Sub1, var.IBS-RnD-Sub2]
+  subnet_ids = [var.IBS-RnD-Sub1, var.IBS-RnD-Sub2, var.IBS-RnD-Sub3, var.IBS-RnD-Sub4]
  }
 
  depends_on = [
