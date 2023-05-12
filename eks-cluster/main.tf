@@ -95,8 +95,8 @@ resource "aws_eks_node_group" "worker-node-group" {
   subnet_ids   = [var.IBS-RnD-Sub1, var.IBS-RnD-Sub2]
 
   scaling_config {
-   desired_size = 1
-   max_size   = 2
+   desired_size = 2
+   max_size   = 8
    min_size   = 1
   }
 
