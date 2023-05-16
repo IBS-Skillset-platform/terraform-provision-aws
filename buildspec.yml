@@ -1,0 +1,54 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+    command:
+      - >-
+        echo install terraform
+        sudo yum install -y yum-utils shadow-utils
+        sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+        sudo yum -y install terraform
+        echo check terraform version
+        terraform version
+      - >-
+        echo install kubectl
+        curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.7/2023-03-17/bin/windows/amd64/kubectl
+        chmod +x ./kubectl
+        echo 'Check kubectl version'
+        kubectl version --short --client
+  pre_build:
+    commands:
+      - >-
+        echo Initialise terraform for eks cluster
+        terraform init
+      - >-
+        echo plan and compile terraform actions
+        terraform plan
+  build:
+    commands:
+      - >-
+        echo apply terraform , provision s3
+        terraform apply -target=module.s3-bucket -auto-approve
+      - >-
+        echo apply terraform , provision dynamodb
+        terraform apply -target=module.nosql-db -auto-approve
+      - >-
+        echo apply terraform , provision rds module
+        terraform apply -target=module.rds-aurora -auto-approve
+      - >-
+        echo apply terraform , provision secret manager
+        terraform apply -target=module.secrets-manager -auto-approve
+      - >-
+        echo apply terraform , provision eks cluster on AWS
+        terraform apply -target=module.eks-cluster -auto-approve
+  post_build:
+    commands:
+      - >-
+        echo check cluster created
+        kubectl cluster-info
+        echo Logging in to Amazon EKS...
+        aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
+        kubectl get pods -n kube-system
+
