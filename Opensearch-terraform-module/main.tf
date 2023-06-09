@@ -10,10 +10,6 @@ locals {
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-resource "random_password" "password" {
-  length  = 32
-  special = true
-}
 
 #tfsec:ignore:aws-cloudwatch-log-group-customer-key
 resource "aws_cloudwatch_log_group" "opensearch_log_group_index_slow_logs" {
@@ -74,12 +70,21 @@ resource "aws_opensearch_domain" "opensearch" {
   engine_version = "OpenSearch_${var.engine_version}"
 
   cluster_config {
-    dedicated_master_enabled = var.dedicated_master_enabled
-    instance_type            = var.instance_type
-    instance_count           = var.instance_count
-    zone_awareness_enabled   = var.zone_awareness_enabled
-    warm_enabled             = false
+       dedicated_master_count   = var.dedicated_master_count
+       dedicated_master_type    = var.dedicated_master_type
+       dedicated_master_enabled = var.dedicated_master_enabled
+       instance_type            = var.instance_type
+       instance_count           = var.instance_count
+       zone_awareness_enabled   = var.zone_awareness_enabled
+       zone_awareness_config {
+         availability_zone_count = var.zone_awareness_enabled ? 3 : null
+       }
   }
+
+
+   vpc_options {
+       subnet_ids = [var.IBS-RnD-Sub1, var.IBS-RnD-Sub2]
+     }
 
   advanced_security_options {
     enabled                        = var.security_options_enabled

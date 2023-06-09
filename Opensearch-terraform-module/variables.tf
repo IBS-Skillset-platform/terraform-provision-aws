@@ -37,7 +37,7 @@ variable "ebs_enabled" {
 }
 variable "ebs_volume_size" {
   type = number
-  default = 100
+  default = 45
 }
 variable "service" {
   type = string
@@ -45,16 +45,29 @@ variable "service" {
  }
 variable "instance_type" {
   type = string
-  default = "r5.large.search"}
+  default = "m6g.large.search"
+  }
 variable "instance_count" {
    type = number
-   default = 1
+   default = 3
    }
 variable "dedicated_master_enabled" {
   type    = bool
-  default = false
+  default = true
 }
 
+variable "dedicated_master_count" {
+  type    = number
+  default = 3
+}
+variable "dedicated_master_type" {
+  type    = string
+  default = "m6g.large.search"
+}
+variable "zone_awareness_enabled" {
+  type    = bool
+  default = true
+}
 variable "security_options_enabled" {
   type    = bool
   default = true
