@@ -4,7 +4,7 @@ terraform {
 
 locals {
   domain        = "${var.service}-engine"
-  master_user   = "${var.service}-masteruser"
+  master_user   = "admin"
 }
 
 data "aws_caller_identity" "current" {}
@@ -92,7 +92,7 @@ resource "aws_opensearch_domain" "opensearch" {
     internal_user_database_enabled = true
     master_user_options {
       master_user_name     = local.master_user
-      master_user_password = "OpenSearchEKS"
+      master_user_password = "Admin@123"
     }
   }
 
