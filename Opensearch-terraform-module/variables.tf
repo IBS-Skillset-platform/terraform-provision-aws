@@ -49,7 +49,7 @@ variable "instance_type" {
   }
 variable "instance_count" {
    type = number
-   default = 3
+   default = 2
    }
 variable "dedicated_master_enabled" {
   type    = bool
@@ -58,7 +58,7 @@ variable "dedicated_master_enabled" {
 
 variable "dedicated_master_count" {
   type    = number
-  default = 3
+  default = 2
 }
 variable "dedicated_master_type" {
   type    = string
