@@ -44,3 +44,11 @@ module "nosql-db" {
 module "secrets-manager" {
   source = "./secrets-manager"
 }
+
+module "autoscaler-policy" {
+  source = "./autoscaler-policy"
+}
+
+module "albcontroller-policy" {
+  source = "./albcontroller-policy"
+}
