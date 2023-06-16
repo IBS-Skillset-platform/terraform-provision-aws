@@ -143,5 +143,3 @@ resource "aws_opensearch_domain" "opensearch" {
 }
 CONFIG
 }
-
-}
