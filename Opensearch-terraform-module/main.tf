@@ -77,7 +77,7 @@ resource "aws_opensearch_domain" "opensearch" {
        instance_count           = var.instance_count
        zone_awareness_enabled   = var.zone_awareness_enabled
        zone_awareness_config {
-         availability_zone_count = var.zone_awareness_enabled ? 3 : null
+         availability_zone_count = var.zone_awareness_enabled ? 2 : null
        }
   }
 
