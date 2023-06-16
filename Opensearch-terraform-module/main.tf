@@ -3,7 +3,7 @@ terraform {
 }
 
 locals {
-  domain        = "${var.service}-engine"
+  domain        = "opensearch-cluster-tf"
   master_user   = "admin"
 }
 
