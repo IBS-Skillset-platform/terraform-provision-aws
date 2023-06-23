@@ -11,60 +11,6 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 
-#tfsec:ignore:aws-cloudwatch-log-group-customer-key
-resource "aws_cloudwatch_log_group" "opensearch_log_group_index_slow_logs" {
-  name              = "/aws/opensearch/${local.domain}/index-slow"
-  retention_in_days = 14
-}
-
-#tfsec:ignore:aws-cloudwatch-log-group-customer-key
-resource "aws_cloudwatch_log_group" "opensearch_log_group_search_slow_logs" {
-  name              = "/aws/opensearch/${local.domain}/search-slow"
-  retention_in_days = 14
-}
-
-#tfsec:ignore:aws-cloudwatch-log-group-customer-key
-resource "aws_cloudwatch_log_group" "opensearch_log_group_es_application_logs" {
-  name              = "/aws/opensearch/${local.domain}/es-application"
-  retention_in_days = 14
-}
-
-resource "aws_cloudwatch_log_resource_policy" "opensearch_log_resource_policy" {
-  policy_name = "${local.domain}-domain-log-resource-policy"
-
-  policy_document = <<CONFIG
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "es.amazonaws.com"
-      },
-      "Action": [
-        "logs:PutLogEvents",
-        "logs:PutLogEventsBatch",
-        "logs:CreateLogStream"
-      ],
-      "Resource": [
-        "${aws_cloudwatch_log_group.opensearch_log_group_index_slow_logs.arn}:*",
-        "${aws_cloudwatch_log_group.opensearch_log_group_search_slow_logs.arn}:*",
-        "${aws_cloudwatch_log_group.opensearch_log_group_es_application_logs.arn}:*"
-      ],
-      "Condition": {
-          "StringEquals": {
-              "aws:SourceAccount": "${data.aws_caller_identity.current.account_id}"
-          },
-          "ArnLike": {
-              "aws:SourceArn": "arn:aws:es:eu-central-1:${data.aws_caller_identity.current.account_id}:domain/${local.domain}"
-          }
-      }
-    }
-  ]
-}
-CONFIG
-}
-
 resource "aws_opensearch_domain" "opensearch" {
   domain_name    = local.domain
   engine_version = "OpenSearch_${var.engine_version}"
@@ -105,19 +51,6 @@ resource "aws_opensearch_domain" "opensearch" {
     volume_size = var.ebs_volume_size
     volume_type = var.volume_type
     throughput  = var.throughput
-  }
-
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.opensearch_log_group_index_slow_logs.arn
-    log_type                 = "INDEX_SLOW_LOGS"
-  }
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.opensearch_log_group_search_slow_logs.arn
-    log_type                 = "SEARCH_SLOW_LOGS"
-  }
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.opensearch_log_group_es_application_logs.arn
-    log_type                 = "ES_APPLICATION_LOGS"
   }
 
   node_to_node_encryption {
