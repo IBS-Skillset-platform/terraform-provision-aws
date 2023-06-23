@@ -45,7 +45,7 @@ variable "service" {
  }
 variable "instance_type" {
   type = string
-  default = "m6g.large.search"
+  default = "r6g.large.search"
   }
 variable "instance_count" {
    type = number
@@ -58,7 +58,7 @@ variable "dedicated_master_enabled" {
 
 variable "dedicated_master_count" {
   type    = number
-  default = 2
+  default = 3
 }
 variable "dedicated_master_type" {
   type    = string
