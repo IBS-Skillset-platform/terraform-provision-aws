@@ -37,7 +37,7 @@ variable "ebs_enabled" {
 }
 variable "ebs_volume_size" {
   type = number
-  default = 45
+  default = 100
 }
 variable "service" {
   type = string
@@ -49,7 +49,7 @@ variable "instance_type" {
   }
 variable "instance_count" {
    type = number
-   default = 2
+   default = 3
    }
 variable "dedicated_master_enabled" {
   type    = bool
