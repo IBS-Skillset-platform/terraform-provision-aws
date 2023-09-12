@@ -3,7 +3,7 @@ terraform {
 }
 
 locals {
-  domain        = "opensearch-terraforrm"
+  domain        = "opensearch-terraform"
   master_user   = "admin"
 }
 
